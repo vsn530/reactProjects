@@ -129,4 +129,4 @@ class ComponentToPrint extends React.Component {
     }
   } */
 
-render(<Example />, document.getElementById('app'));
+render(<Example  />, document.getElementById('app'));
