@@ -1,75 +1,52 @@
-//Install -->Import-->Use
-/* import validator from 'validator';
-console.log(validator.isEmail('test'));
-console.log(validator.isEmail('test@gmail.com')); */
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter , Route , Switch , Link, NavLink} from 'react-router-dom';
+import { Provider } from 'react-redux';
+import AppRouter from './routers/AppRouter';
+import configureStore from './store/configureStore';
+import {addExpense,removeExpense} from './actions/expenses';
+import { setTextFilter } from './actions/filters';
+import getVisibleExpenses from './selectors/expenses';
 import 'normalize.css/normalize.css';
 import './styles/styles.scss';
 
-const ExpenseDashboardPage=()=>(
-    <div>
-        This is from my dashboard component
-    </div>
-);
+const store = configureStore();
 
-const AddExpensePage=()=>(
-    <div>
-        This is from my add expense component
-    </div>
-);
+/* store.subscribe(()=>{
+    console.log(store.getState());
+}); */
 
-const EditExpensePage=()=>(
-    <div>
-        This is from my Edit expense component
-    </div>
-);
 
-const HelpPage=()=>(
-    <div>
-        This is from my Help component
-    </div>
-);
+//console.log(store.getState());
+store.dispatch(addExpense({description:'Water Bill',amount:4500}));
+store.dispatch(addExpense({description:'Gas Bill',createdAt:1000}));
+store.dispatch(addExpense({description:'Rent',amount:109500}));
+//store.dispatch(setTextFilter('bill'));
 
-const Header =()=>(
-    <header>
-        <h1>Expensify</h1>
-        <NavLink to="./"  activeClassName="is-active" exact={true}>Dashboard</NavLink><br/>
-        <NavLink to="./create" activeClassName="is-active" >Create Expense</NavLink><br/>
-        <NavLink to="./edit" activeStyle={{fontWeight:"bold"}}>Edit Expenses</NavLink><br/>
-        <NavLink to="./help" activeClassName="is-active">Help</NavLink>
-    </header>
-)
 
-const NotFoundPage=()=>(
-    <div>
-       <h1>404!--</h1> <br/>
-       <Link to="./">Go Home</Link>
-       
-    </div>
-);
+let VisibleExpenses = getVisibleExpenses(store.getState().expenses,store.getState().filters);
 
-const routes =(
-    <BrowserRouter>
-        <div>
-            <Header/>
-            <Switch>
-                <Route path="/" component={ExpenseDashboardPage} exact={true}/>
-                <Route path="/create" component={AddExpensePage }/>
-                <Route path="/edit" component={EditExpensePage }/>
-                <Route path="/help" component={HelpPage }/>
-                <Route  component={NotFoundPage }/>
-            </Switch>
-        </div>
-        
-    </BrowserRouter>
+
+
+/* setTimeout(()=>{
+    store.dispatch(setTextFilter('bill'));
+},3000) */
+
+const state = store.getState();
+VisibleExpenses = getVisibleExpenses(state.expenses,state.filters);
+console.log(VisibleExpenses);
+
+
+const jsx = (
+    <Provider store = {store}>
+        <AppRouter />
+    </Provider>
 );
 
 
 
-ReactDOM.render(routes,document.getElementById('app'));
+
+ReactDOM.render(jsx, document.getElementById('app'));
 
 
 
