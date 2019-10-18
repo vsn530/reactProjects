@@ -23,7 +23,7 @@ export const setStartDate = ((date = undefined)=>({
     date
 }));
 
-//SET_END_DATE
+//SET_END_DATE==
 export const setEndDate = ((date = undefined)=>({
     type:'SET_END_DATE',
     date
